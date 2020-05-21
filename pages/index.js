@@ -1,6 +1,20 @@
 import Head from 'next/head'
+import { useState, useEffect } from 'react'
+import {useRouter} from 'next/router'
 
-export default function Home() {
+function Home() {
+  const [planet, setPlanet]=useState("....")  
+  const [href, setHref]=useState("")  
+  const [googlestring, setGooglestring]=useState("")
+  useEffect ( () => 
+  {
+
+    const randNum=Math.round(Math.random(1)*10)+1
+    fetch ('https://swapi.dev/api/planets/'+randNum+'/').then(res => res.json())
+    .then(json => setPlanet(json.name))
+    setHref(window.location.href)
+    setGooglestring("https://www.google.com/search?q="+planet+"&tbm=ischg")
+  },[])
   return (
     <div className="container">
       <Head>
@@ -10,9 +24,13 @@ export default function Home() {
 
       <main>
         <h1 className="title">
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
+  Welcome to <a href={"https://www.google.com/search?tbm=isch&q="+planet}>{planet}</a>
         </h1>
+        <h1> Router testing (try hacking the querystring)</h1> 
+        <code>useRouter().asPath -> {useRouter().asPath} </code>
 
+        <h1>Full Query String from useEffect:</h1>
+        <code> {href} </code>
         <p className="description">
           Get started by editing <code>pages/index.js</code>
         </p>
@@ -130,7 +148,7 @@ export default function Home() {
         }
 
         code {
-          background: #fafafa;
+          background: #dddddd;
           border-radius: 5px;
           padding: 0.75rem;
           font-size: 1.1rem;
@@ -207,3 +225,4 @@ export default function Home() {
     </div>
   )
 }
+export default Home;
